@@ -1,0 +1,55 @@
+# docker-compose.yml
+# Este archivo define los servicios que nuestra app necesita para "vivir".
+
+services:
+  # El servidor web y el entorno PHP para Laravel
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rutadirecta-app
+    container_name: rd-gdl-app
+    restart: unless-stopped
+    working_dir: /var/www
+    ports:
+      - "8005:8000" 
+    volumes:
+      - ./:/var/www
+    networks:
+      - rd-network
+
+  # El motor de base de datos MySQL
+  db:
+    image: mysql:8.0
+    container_name: rd-gdl-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: rutadirecta_db
+      MYSQL_ROOT_PASSWORD: secret_password
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - rd-network
+  
+  # Interfaz visual para la base de datos
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: rd-gdl-pma
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+    networks:
+      - rd-network
+
+# Red interna para que los contenedores se hablen entre sí
+networks:
+  rd-network:
+    driver: bridge
+
+# Espacio persistente para que no se borren tus datos de la DB al apagar Docker
+volumes:
+  dbdata:
+    driver: local
