@@ -1,0 +1,704 @@
+/* =========================================================
+   RutaDirecta GDL — Estilos de visualización de rutas
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --red-primary:    #CC1F29;
+    --red-dark:       #A81820;
+    --red-light:      #fde8ea;
+    --blue-primary:   #1B2B6B;
+    --blue-accent:    #2563EB;
+    --green-accent:   #16a34a;
+    --gray-bg:        #F0F2F7;
+    --gray-card:      #FFFFFF;
+    --gray-border:    #E2E8F0;
+    --gray-text:      #64748B;
+    --gray-dark:      #1E293B;
+    --live-dot:       #3B82F6;
+    --shadow-sm:      0 1px 3px rgba(0,0,0,.08);
+    --shadow-md:      0 4px 16px rgba(0,0,0,.10);
+    --shadow-lg:      0 8px 32px rgba(0,0,0,.14);
+    --radius-sm:      8px;
+    --radius-md:      16px;
+    --radius-lg:      24px;
+    --transition:     0.25s cubic-bezier(.4,0,.2,1);
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+    background: var(--gray-bg);
+    color: var(--gray-dark);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Top Nav ─────────────────────────────────────────── */
+.top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+}
+
+.top-nav .back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 50%;
+    transition: background var(--transition);
+    color: var(--gray-dark);
+}
+
+.top-nav .back-btn:hover {
+    background: var(--gray-bg);
+}
+
+.top-nav h1 {
+    font-size: 17px;
+    font-weight: 600;
+    flex: 1;
+}
+
+.linea-badge {
+    background: var(--red-primary);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--blue-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    overflow: hidden;
+}
+
+/* ── Page wrapper ─────────────────────────────────────── */
+.page {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px 16px 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* ── Route Hero Card ──────────────────────────────────── */
+.route-hero {
+    background: linear-gradient(135deg, var(--red-primary) 0%, var(--red-dark) 100%);
+    border-radius: var(--radius-lg);
+    padding: 22px 22px 20px;
+    color: #fff;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.route-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.07);
+}
+
+.route-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.05);
+}
+
+.hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+}
+
+.hero-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    opacity: .75;
+    text-transform: uppercase;
+}
+
+.hero-route-name {
+    font-size: 22px;
+    font-weight: 800;
+    margin-top: 2px;
+}
+
+.hero-bus-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,.18);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+}
+
+.hero-bus-icon svg {
+    width: 26px;
+    height: 26px;
+    fill: #fff;
+}
+
+.hero-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.hero-destination-label {
+    font-size: 11px;
+    opacity: .7;
+    margin-bottom: 2px;
+}
+
+.hero-destination {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.hero-next-label {
+    font-size: 11px;
+    opacity: .7;
+    margin-bottom: 2px;
+    text-align: right;
+}
+
+.hero-next-time {
+    font-size: 22px;
+    font-weight: 800;
+    text-align: right;
+}
+
+/* ── Info Pills ───────────────────────────────────────── */
+.info-pills {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.pill {
+    flex: 1;
+    background: var(--gray-card);
+    border: 1px solid var(--gray-border);
+    border-radius: var(--radius-md);
+    padding: 12px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.pill:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.pill-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.pill-label {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--gray-text);
+    text-transform: uppercase;
+    letter-spacing: .6px;
+}
+
+.pill-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-dark);
+    margin-top: 1px;
+}
+
+.pill-value.on-time  { color: var(--green-accent); }
+.pill-value.warning  { color: #d97706; }
+
+/* ── Timeline Card ────────────────────────────────────── */
+.timeline-card {
+    background: var(--gray-card);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow-md);
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.timeline-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--live-dot);
+    letter-spacing: .4px;
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--live-dot);
+    animation: pulse 1.4s infinite;
+}
+
+@keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: .5; transform: scale(1.4); }
+}
+
+/* ── Timeline Stops ───────────────────────────────────── */
+.timeline {
+    position: relative;
+    padding-left: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.stop {
+    position: relative;
+    padding: 0 0 22px 0;
+}
+
+.stop:last-child {
+    padding-bottom: 0;
+}
+
+/* Vertical line */
+.stop::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 14px;
+    bottom: -8px;
+    width: 2px;
+    background: var(--gray-border);
+}
+
+.stop:last-child::before {
+    display: none;
+}
+
+/* Passed stops: red line */
+.stop.passed::before {
+    background: var(--red-primary);
+}
+
+/* Dot */
+.stop-dot {
+    position: absolute;
+    left: -30px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--gray-border);
+    background: #fff;
+}
+
+.stop.passed .stop-dot {
+    border-color: var(--red-primary);
+    background: var(--red-primary);
+}
+
+.stop.current .stop-dot {
+    width: 18px;
+    height: 18px;
+    left: -33px;
+    top: 2px;
+    border-color: var(--red-primary);
+    background: var(--red-primary);
+    box-shadow: 0 0 0 4px rgba(204,31,41,.2);
+}
+
+/* Map pin for current stop */
+.stop.current .stop-dot::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+/* Stop content */
+.stop-time {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-text);
+}
+
+.stop.passed .stop-time { color: var(--gray-text); }
+
+.stop-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-text);
+    margin-top: 2px;
+}
+
+.stop.passed .stop-name { color: var(--gray-text); }
+
+/* Current stop bubble */
+.current-bubble {
+    background: var(--red-light);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    margin-top: 2px;
+}
+
+.current-bubble-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.current-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--red-primary);
+}
+
+.arriving-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--red-primary);
+}
+
+.current-stop-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gray-dark);
+}
+
+/* Next stop */
+.next-stop-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.next-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--blue-accent);
+    margin-bottom: 2px;
+}
+
+.next-time {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--blue-accent);
+}
+
+.next-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-dark);
+}
+
+/* Future stops */
+.stop.future .stop-time  { color: #94a3b8; }
+.stop.future .stop-name  { color: #94a3b8; }
+.stop.future .stop-dot   { border-color: #cbd5e1; background: #f1f5f9; }
+.stop.future::before     { background: var(--gray-border); }
+
+/* ── Payment Card ─────────────────────────────────────── */
+.payment-card {
+    background: var(--gray-card);
+    border-radius: var(--radius-lg);
+    padding: 18px 20px;
+    box-shadow: var(--shadow-md);
+}
+
+.movilidad-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.movilidad-icon {
+    width: 46px;
+    height: 32px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #15803d, #166534);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.movilidad-icon span {
+    color: #fff;
+    font-size: 8px;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.movilidad-info {
+    flex: 1;
+}
+
+.movilidad-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+    color: var(--gray-text);
+}
+
+.movilidad-balance {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--gray-dark);
+    margin-top: 1px;
+}
+
+.top-up-btn {
+    background: var(--gray-bg);
+    border: 1px solid var(--gray-border);
+    border-radius: var(--radius-sm);
+    padding: 7px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+.top-up-btn:hover { background: #e2e8f0; }
+
+.payment-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-qr {
+    flex: 1;
+    background: var(--blue-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 14px 10px;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+}
+
+.btn-qr:hover {
+    background: #14205a;
+    transform: translateY(-2px);
+}
+
+.btn-nfc {
+    flex: 1;
+    background: #fff;
+    color: var(--blue-primary);
+    border: 2px solid var(--blue-primary);
+    border-radius: var(--radius-md);
+    padding: 14px 10px;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+}
+
+.btn-nfc:hover {
+    background: #eff6ff;
+    transform: translateY(-2px);
+}
+
+/* ── Lista de rutas (index list) ──────────────────────── */
+.section-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--gray-dark);
+    margin-bottom: 4px;
+}
+
+.section-subtitle {
+    font-size: 13px;
+    color: var(--gray-text);
+    margin-bottom: 16px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gray-card);
+    border: 1px solid var(--gray-border);
+    border-radius: var(--radius-md);
+    padding: 11px 16px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+    background: transparent;
+    color: var(--gray-dark);
+}
+
+.search-bar svg { color: var(--gray-text); flex-shrink: 0; }
+
+.rutas-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ruta-card {
+    background: var(--gray-card);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: transform var(--transition), box-shadow var(--transition);
+    border: 1px solid transparent;
+}
+
+.ruta-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--gray-border);
+}
+
+.ruta-badge {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--red-primary), var(--red-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    flex-shrink: 0;
+    letter-spacing: -.3px;
+}
+
+.ruta-info { flex: 1; }
+
+.ruta-nombre {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-dark);
+    margin-bottom: 3px;
+}
+
+.ruta-empresa {
+    font-size: 12px;
+    color: var(--gray-text);
+}
+
+.ruta-tarifa {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--red-primary);
+}
+
+.ruta-arrow {
+    color: var(--gray-text);
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray-text);
+}
+
+.empty-state svg {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    opacity: .4;
+}
+
+.empty-state p {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* ── Responsive ───────────────────────────────────────── */
+@media (min-width: 520px) {
+    .info-pills { gap: 14px; }
+}
