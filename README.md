@@ -68,6 +68,9 @@
    2. docker compose up -d
    3. net start winnat
 
+**Documentación del código**
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CodeNestorX/RutaDirecta-GDL)
+
 
 
 
