@@ -56,7 +56,9 @@
             </div>
             <div>
                 <p class="hero-next-label">Next Stop</p>
-                <p class="hero-next-time" id="next-time">4 min</p>
+                <p class="hero-next-time"
+                   id="next-time"
+                   data-eta-seconds="{{ $etaProxima * 60 }}">{{ $etaProxima > 0 ? $etaProxima . ' min' : 'Ahora' }}</p>
             </div>
         </div>
     </section>
@@ -73,10 +75,12 @@
         </div>
 
         <div class="pill" role="listitem">
-            <span class="pill-icon" aria-hidden="true">✅</span>
+            <span class="pill-icon" aria-hidden="true">{{ $multiplicador > 1.0 ? '⚠️' : '✅' }}</span>
             <div>
                 <p class="pill-label">Status</p>
-                <p class="pill-value on-time">On Time</p>
+                <p class="pill-value {{ $multiplicador > 1.0 ? 'warning' : 'on-time' }}">
+                    {{ $multiplicador > 1.0 ? ($factorDescripcion ?? 'Hora Pico') : 'On Time' }}
+                </p>
             </div>
         </div>
 
@@ -101,33 +105,23 @@
             </div>
         </div>
 
+        {{-- Badge informativo cuando hay factor de ajuste activo --}}
+        @if($multiplicador > 1.0 && $factorDescripcion)
+        <div class="factor-badge" role="alert" aria-live="polite">
+            <span aria-hidden="true">⚠️</span>
+            <span>Factor activo: <strong>{{ $factorDescripcion }}</strong>
+                — tiempos ×{{ number_format($multiplicador, 1) }}</span>
+        </div>
+        @endif
+
         <ol class="timeline" aria-label="Paradas de la ruta">
 
-            @php
-                $paradas     = $ruta->paradas->sortBy(fn($p) => $p->pivot->orden_en_ruta)->values();
-                $totalParadas = $paradas->count();
-                // Simulamos que la parada actual es la del medio (o la primera si hay pocas)
-                $currentIdx  = $totalParadas > 2 ? (int)floor($totalParadas / 2) : 0;
-            @endphp
-
-            @forelse ($paradas as $idx => $parada)
+            {{-- Iteramos sobre $paradasConETA generado por el Motor Predictivo en el controlador --}}
+            @forelse ($paradasConETA as $item)
                 @php
-                    $tiempoDesde = $parada->pivot->tiempo_promedio_entre_paradas ?? 0;
-
-                    if ($idx < $currentIdx) {
-                        $stopClass = 'passed';
-                        $hora = now()->subMinutes(($currentIdx - $idx) * max(1, $tiempoDesde))->format('H:i');
-                        $label = "Departed $hora";
-                    } elseif ($idx === $currentIdx) {
-                        $stopClass = 'current';
-                        $hora = '';
-                        $label = '';
-                    } else {
-                        $stopClass = 'future';
-                        $hora = '';
-                        $minutosRestantes = ($idx - $currentIdx) * max(1, $tiempoDesde);
-                        $label = "In $minutosRestantes min";
-                    }
+                    $parada    = $item['parada'];
+                    $stopClass = $item['estado'];   // 'passed' | 'current' | 'future'
+                    $label     = $item['label'];    // ej. 'Departed 07:42' | 'In 3 min'
                 @endphp
 
                 <li class="stop {{ $stopClass }}"
