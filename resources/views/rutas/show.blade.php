@@ -11,6 +11,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="/css/rutas.css" />
+
+    {{-- ── Leaflet.js (CDN) ─────────────────────────────── --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+
+    {{-- ── Estilos exclusivos del mapa ───────────────────── --}}
+    <link rel="stylesheet" href="/css/mapa.css" />
 </head>
 <body>
 
@@ -61,6 +67,48 @@
                    data-eta-seconds="{{ $etaProxima * 60 }}">{{ $etaProxima > 0 ? $etaProxima . ' min' : 'Ahora' }}</p>
             </div>
         </div>
+    </section>
+
+    <!-- ── Mapa Interactivo ──────────────────────────────── -->
+    {{--
+        ── Puente de datos PHP → JS (Fase 2) ───────────────────────────
+        @json() de Laravel llama a json_encode() con las flags:
+          JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+        Esto escapa <, >, ', " y & → safe contra XSS incluso si un
+        nombre de parada contuviera caracteres especiales.
+
+        Sólo se incluyen paradas que tengan latitud Y longitud válidas
+        (no nulas y no cero), así mapa.js recibe únicamente datos
+        georreferenciados y puede confiar en que cada objeto es usable.
+    --}}
+    @php
+        $paradasParaMapa = $ruta->paradas
+            // ① Filtrar: sólo paradas con coordenadas reales
+            ->filter(fn($p) =>
+                !is_null($p->latitud)  && $p->latitud  != 0 &&
+                !is_null($p->longitud) && $p->longitud != 0
+            )
+            // ② Mapear: sólo los campos que necesita el mapa
+            ->map(fn($p) => [
+                'nombre'  => $p->nombre,
+                'lat'     => (float) $p->latitud,
+                'lng'     => (float) $p->longitud,
+                'orden'   => $p->pivot->orden_en_ruta  ?? null,
+                'eta_min' => collect($paradasConETA)
+                                ->firstWhere('parada.id', $p->id)['eta_min'] ?? null,
+                'estado'  => collect($paradasConETA)
+                                ->firstWhere('parada.id', $p->id)['estado']  ?? 'future',
+            ])
+            // ③ Re-indexar para que el array JSON sea ordenado [0,1,2…]
+            ->values();
+    @endphp
+    <script>
+        window.PARADAS_DATA = @json($paradasParaMapa);
+    </script>
+
+    <section class="map-section" aria-label="Mapa de la ruta">
+        <p class="map-section-title">Route Map</p>
+        <div id="map" role="img" aria-label="Mapa interactivo con las paradas de la ruta"></div>
     </section>
 
     <!-- ── Info Pills ────────────────────────────────────── -->
@@ -210,6 +258,9 @@
 
 </main>
 
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="/js/mapa.js"></script>
 <script src="/js/rutas.js"></script>
 </body>
 </html>
