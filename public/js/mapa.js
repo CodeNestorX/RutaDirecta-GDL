@@ -14,11 +14,6 @@
  *     eta_min : number|null   — Minutos de ETA (null si ya pasó)
  *     estado  : 'passed' | 'current' | 'future'
  *   }
- *
- * Seguridad:
- *   • PHP → @json escapa <, >, ', " y & (JSON_HEX_* flags).
- *   • JS  → validamos lat/lng con isFinite() antes de usarlos.
- * ─────────────────────────────────────────────────────────────
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -63,21 +58,73 @@ document.addEventListener('DOMContentLoaded', () => {
     }).addTo(map);
 
     // ════════════════════════════════════════════════════════════
-    // 4. POLYLINE: traza la ruta conectando todas las paradas
-    //    en el orden en que llegan (ya vienen ordenadas por PHP).
+    // 4. RUTA POR CALLES: petición a la API pública de OSRM
+    //    para obtener la geometría real de la vía y dibujarla.
     // ════════════════════════════════════════════════════════════
 
-    // Extraemos las coordenadas en el mismo orden del array.
-    // L.polyline espera un array de [lat, lng].
+    // Coordenadas en orden [lat, lng] — se usan para el fallback y el bounds.
     const latlngs = paradas.map(p => [p.lat, p.lng]);
 
-    L.polyline(latlngs, {
-        color:     '#6366f1',   // índigo — coherente con la paleta de la app
-        weight:    4,           // grosor de línea en px
-        opacity:   0.85,
-        lineJoin:  'round',     // esquinas suavizadas
-        lineCap:   'round',
-    }).addTo(map);
+    // Estilos compartidos entre la ruta OSRM y el fallback
+    const estiloLinea = {
+        color:   '#6366f1',  // índigo — coherente con la paleta de la app
+        weight:  4,
+        opacity: 0.85,
+        lineJoin: 'round',
+        lineCap:  'round',
+    };
+
+    /**
+     * Dibuja el trazado a vuelo de pájaro como plan B.
+     * Se llama desde el catch si OSRM no responde correctamente.
+     */
+    function dibujarFallback() {
+        console.warn('[RutaDirecta] OSRM no disponible — dibujando línea recta.');
+        L.polyline(latlngs, estiloLinea).addTo(map);
+    }
+
+    // ── Construir la URL de OSRM ─────────────────────────────────────
+    //    OSRM requiere el formato: lng,lat separados por punto y coma.
+    //    Ejemplo: -103.349,20.659;-103.348,20.661
+    //    overview=full  → devuelve la geometría completa de la ruta.
+    //    geometries=geojson → formato GeoJSON, compatible con L.geoJSON.
+    const coordenadasOSRM = paradas
+        .map(p => `${p.lng},${p.lat}`)   // ⚠️ OSRM usa lng primero, luego lat
+        .join(';');
+
+    const urlOSRM =
+        `https://router.project-osrm.org/route/v1/driving/${coordenadasOSRM}` +
+        `?overview=full&geometries=geojson`;
+
+    // ── Petición asíncrona ───────────────────────────────────────────
+    fetch(urlOSRM)
+        .then(respuesta => {
+            // fetch no lanza error en códigos 4xx/5xx; lo verificamos manualmente
+            if (!respuesta.ok) {
+                throw new Error(`OSRM respondió con estado ${respuesta.status}`);
+            }
+            return respuesta.json();
+        })
+        .then(data => {
+            // OSRM devuelve un array de rutas; tomamos la primera (más corta)
+            const geometria = data?.routes?.[0]?.geometry;
+
+            if (!geometria) {
+                throw new Error('OSRM no devolvió geometría en la respuesta.');
+            }
+
+            // L.geoJSON acepta el objeto GeoJSON directamente y lo dibuja en el mapa
+            L.geoJSON(geometria, {
+                style: estiloLinea,
+            }).addTo(map);
+
+            console.info('[RutaDirecta] Ruta por calles dibujada con OSRM.');
+        })
+        .catch(err => {
+            // Cualquier fallo de red, CORS o de datos activa el plan B
+            console.warn('[RutaDirecta] Error al contactar OSRM:', err.message);
+            dibujarFallback();
+        });
 
     // ════════════════════════════════════════════════════════════
     // 5. MARCADORES: un icono personalizado por cada parada,
