@@ -17,6 +17,12 @@
 
     {{-- ── Estilos exclusivos del mapa ───────────────────── --}}
     <link rel="stylesheet" href="/css/mapa.css" />
+
+    {{-- ── Estilos de favoritos ──────────────────────────── --}}
+    <link rel="stylesheet" href="/css/favoritos.css" />
+
+    {{-- ── Token CSRF para fetch de favoritos ─────────────── --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 </head>
 <body>
 
@@ -38,6 +44,20 @@
 
     <!-- ── Hero: Ruta actual ────────────────────────────── -->
     <section class="route-hero" aria-label="Información de ruta actual">
+
+        {{-- Botón corazón: solo visible si el usuario está logueado --}}
+        @auth
+        <button class="fav-btn fav-btn--hero {{ $esFavorito ? 'active' : '' }}"
+                id="fav-hero"
+                data-ruta-id="{{ $ruta->id }}"
+                data-favorito="{{ $esFavorito ? '1' : '0' }}"
+                aria-label="{{ $esFavorito ? 'Quitar de favoritos' : 'Guardar en favoritos' }}">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+        </button>
+        @endauth
+
         <div class="hero-top">
             <div>
                 <p class="hero-label">Current Route</p>
@@ -262,5 +282,6 @@
     src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="/js/mapa.js"></script>
 <script src="/js/rutas.js"></script>
+<script src="/js/favoritos.js"></script>
 </body>
 </html>

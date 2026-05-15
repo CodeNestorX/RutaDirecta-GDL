@@ -23,4 +23,15 @@ class Ruta extends Model
                     ->withTimestamps()
                     ->orderByPivot('orden_en_ruta');
     }
+
+    /**
+     * Usuarios que han marcado esta ruta como favorita.
+     * Tabla pivote: favoritos (user_id, ruta_id).
+     */
+    public function favoritosUsuarios()
+    {
+        return $this->belongsToMany(User::class, 'favoritos')
+                    ->withTimestamps();
+    }
 }
+

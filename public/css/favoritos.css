@@ -1,0 +1,239 @@
+/* =========================================================
+   favoritos.css — Estilos del sistema de favoritos
+   Complementa rutas.css. No lo reemplaza.
+   ========================================================= */
+
+/* ════════════════════════════════════════════════════════════
+   1. BOTÓN CORAZÓN — tarjetas del listado
+   ════════════════════════════════════════════════════════════ */
+
+/* La tarjeta necesita contexto de posicionamiento */
+.ruta-item {
+    position: relative;
+}
+
+.fav-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+
+    /* Reset de botón */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 50%;
+
+    /* Centra el icono */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Color base: gris apagado */
+    color: #cbd5e1;
+    transition: color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.fav-btn:hover {
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+    transform: scale(1.12);
+}
+
+/* Estado activo: corazón relleno rojo */
+.fav-btn.active {
+    color: #ef4444;
+}
+
+.fav-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: fill 0.2s ease, transform 0.15s ease;
+}
+
+.fav-btn.active svg {
+    fill: #ef4444;
+}
+
+/* Micro-animación de pulso al activar */
+@keyframes fav-pulse {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.35); }
+    70%  { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+
+.fav-btn.pulse svg {
+    animation: fav-pulse 0.4s ease forwards;
+}
+
+/* ════════════════════════════════════════════════════════════
+   2. BOTÓN CORAZÓN — hero del detalle (show.blade.php)
+   ════════════════════════════════════════════════════════════ */
+
+.fav-btn--hero {
+    /* Posición absoluta en la esquina superior derecha del hero */
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 3;
+
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(6px);
+    border: none;
+    border-radius: var(--radius-sm, 8px);
+    padding: 8px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Blanco semitransparente sobre el hero rojo */
+    color: rgba(255, 255, 255, 0.85);
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.fav-btn--hero:hover {
+    background: rgba(255, 255, 255, 0.28);
+    color: #fff;
+    transform: scale(1.08);
+}
+
+/* Activo: corazón relleno blanco */
+.fav-btn--hero.active {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.28);
+}
+
+.fav-btn--hero svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: fill 0.2s ease;
+}
+
+.fav-btn--hero.active svg {
+    fill: #fff;
+}
+
+/* ════════════════════════════════════════════════════════════
+   3. ENLACE "SAVED" EN EL NAV
+   ════════════════════════════════════════════════════════════ */
+
+.nav-saved-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-text, #64748b);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: background 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+}
+
+.nav-saved-link:hover {
+    background: var(--gray-bg, #f0f2f7);
+    color: var(--red-primary, #CC1F29);
+}
+
+.nav-saved-link svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Avatar con inicial del nombre */
+.avatar--auth {
+    background: var(--red-primary, #CC1F29);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0;
+}
+
+/* Avatar para guest — enlace a login */
+.avatar--guest {
+    background: var(--gray-text, #64748b);
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* ════════════════════════════════════════════════════════════
+   4. PÁGINA DE FAVORITOS (/favoritos)
+   ════════════════════════════════════════════════════════════ */
+
+.favoritos-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.favoritos-count {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--red-primary, #CC1F29);
+    background: #fde8ea;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+/* Estado vacío de favoritos */
+.empty-favoritos {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray-text, #64748b);
+}
+
+.empty-favoritos svg {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    display: block;
+    opacity: 0.35;
+}
+
+.empty-favoritos p {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.empty-favoritos .btn-explorar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--red-primary, #CC1F29), var(--red-dark, #A81820));
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: var(--radius-md, 16px);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 4px 16px rgba(204, 31, 41, 0.35);
+}
+
+.empty-favoritos .btn-explorar:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}

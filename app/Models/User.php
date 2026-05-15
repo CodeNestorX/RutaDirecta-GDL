@@ -46,4 +46,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Rutas marcadas como favoritas por este usuario.
+     * Tabla pivote: favoritos (user_id, ruta_id).
+     */
+    public function rutas()
+    {
+        return $this->belongsToMany(Ruta::class, 'favoritos')
+                    ->withTimestamps();
+    }
 }
+

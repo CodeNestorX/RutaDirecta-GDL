@@ -5,17 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\Ruta;
 use App\Models\FactorAjuste;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class RutaController extends Controller
 {
     /**
      * Listado de todas las rutas disponibles.
+     * Si el usuario está logueado, pasa los IDs de sus favoritos
+     * para que la vista pueda pintar el corazón activo en cada tarjeta.
      */
     public function index()
     {
         $rutas = Ruta::all();
-        return view('rutas.index', compact('rutas'));
+
+        // IDs de rutas favoritas del usuario — Collection vacía si es guest
+        $favoritosIds = Auth::check()
+            ? Auth::user()->rutas()->pluck('rutas.id')
+            : collect();
+
+        return view('rutas.index', compact('rutas', 'favoritosIds'));
     }
 
     /**
@@ -113,12 +122,17 @@ class RutaController extends Controller
         $proximaParada = collect($paradasConETA)->firstWhere('estado', 'future');
         $etaProxima    = $proximaParada ? $proximaParada['eta_min'] : 0;
 
+        // ── 7. ¿Es favorita para el usuario actual? ──────────────────────────
+        $esFavorito = Auth::check()
+            && Auth::user()->rutas()->where('rutas.id', $ruta->id)->exists();
+
         return view('rutas.show', compact(
             'ruta',
             'paradasConETA',
             'etaProxima',
             'multiplicador',
-            'factorDescripcion'
+            'factorDescripcion',
+            'esFavorito'
         ));
     }
 }

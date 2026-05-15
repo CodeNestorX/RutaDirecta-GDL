@@ -1,0 +1,291 @@
+/* =========================================================
+   auth.css — Estilos exclusivos de las páginas de autenticación
+   Complementa rutas.css (no lo reemplaza).
+   ========================================================= */
+
+/* ── Hero de la pantalla de auth ─────────────────────────── */
+.auth-hero {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 4px 4px 0;
+}
+
+.auth-hero-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, var(--red-primary), var(--red-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(204, 31, 41, 0.35);
+}
+
+.auth-hero-icon svg {
+    width: 30px;
+    height: 30px;
+    fill: #fff;
+}
+
+.auth-hero-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--gray-dark);
+    line-height: 1.2;
+}
+
+.auth-hero-subtitle {
+    font-size: 12px;
+    color: var(--gray-text);
+    margin-top: 2px;
+}
+
+/* ── Tarjeta del formulario ──────────────────────────────── */
+.auth-card {
+    background: var(--gray-card);
+    border-radius: var(--radius-lg);
+    padding: 24px 22px 22px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--gray-border);
+}
+
+.auth-card-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--gray-dark);
+    margin-bottom: 4px;
+}
+
+.auth-card-subtitle {
+    font-size: 13px;
+    color: var(--gray-text);
+    margin-bottom: 22px;
+}
+
+/* ── Alerta de error ─────────────────────────────────────── */
+.auth-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    line-height: 1.45;
+}
+
+.auth-alert--error {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    color: #991b1b;
+}
+
+.auth-alert svg { flex-shrink: 0; margin-top: 1px; }
+
+/* ── Campos del formulario ───────────────────────────────── */
+.auth-field {
+    margin-bottom: 16px;
+}
+
+.auth-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-dark);
+    margin-bottom: 6px;
+}
+
+.auth-input-wrapper {
+    position: relative;
+}
+
+.auth-input {
+    width: 100%;
+    border: 1.5px solid var(--gray-border);
+    border-radius: var(--radius-sm);
+    padding: 11px 14px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--gray-dark);
+    background: #fff;
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    /* Si está dentro de un wrapper con botón ojo, deja espacio */
+    .auth-input-wrapper & {
+        padding-right: 44px;
+    }
+}
+
+/* Selector alternativo para navegadores que no soporten nesting */
+.auth-input-wrapper .auth-input {
+    padding-right: 44px;
+}
+
+.auth-input:focus {
+    border-color: var(--red-primary);
+    box-shadow: 0 0 0 3px rgba(204, 31, 41, 0.12);
+}
+
+.auth-input--error {
+    border-color: #ef4444;
+}
+
+.auth-input--error:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.auth-field-error {
+    font-size: 12px;
+    color: #dc2626;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+/* ── Botón toggle de contraseña ──────────────────────────── */
+.auth-toggle-pw {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gray-text);
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--transition);
+    border-radius: 4px;
+}
+
+.auth-toggle-pw:hover { color: var(--gray-dark); }
+
+/* ── Remember me ─────────────────────────────────────────── */
+.auth-remember {
+    margin-bottom: 20px;
+}
+
+.auth-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--gray-text);
+    cursor: pointer;
+    user-select: none;
+}
+
+.auth-checkbox-label input[type="checkbox"] {
+    /* Ocultamos el nativo para usar el custom */
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.auth-checkbox-custom {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--gray-border);
+    border-radius: 4px;
+    background: #fff;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color var(--transition), background var(--transition);
+}
+
+.auth-checkbox-label input:checked + .auth-checkbox-custom {
+    background: var(--red-primary);
+    border-color: var(--red-primary);
+}
+
+.auth-checkbox-label input:checked + .auth-checkbox-custom::after {
+    content: '';
+    width: 5px;
+    height: 9px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+}
+
+/* ── Botón primario ──────────────────────────────────────── */
+.auth-btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, var(--red-primary), var(--red-dark));
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+    box-shadow: 0 4px 16px rgba(204, 31, 41, 0.35);
+    letter-spacing: 0.2px;
+}
+
+.auth-btn-primary:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(204, 31, 41, 0.45);
+}
+
+.auth-btn-primary:active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* ── Link inferior ───────────────────────────────────────── */
+.auth-switch {
+    text-align: center;
+    font-size: 13px;
+    color: var(--gray-text);
+    margin-top: 18px;
+}
+
+.auth-link {
+    color: var(--red-primary);
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity var(--transition);
+}
+
+.auth-link:hover { opacity: 0.75; text-decoration: underline; }
+
+/* ── Indicador de fortaleza de contraseña ────────────────── */
+.auth-pw-strength {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: -6px 0 16px;
+}
+
+.auth-pw-bars {
+    display: flex;
+    gap: 4px;
+}
+
+.auth-pw-bars .bar {
+    width: 34px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--gray-border);
+    transition: background 0.3s ease;
+}
+
+.auth-pw-bars .bar.active {
+    /* el color se asigna desde JS según el nivel */
+}
+
+.auth-pw-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-text);
+}
