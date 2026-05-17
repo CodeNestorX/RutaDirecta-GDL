@@ -1,8 +1,5 @@
-# docker-compose.yml
-# Este archivo define los servicios que nuestra app necesita para "vivir".
-
+# docker-compose.yml corregido
 services:
-  # El servidor web y el entorno PHP para Laravel
   app:
     build:
       context: .
@@ -11,18 +8,21 @@ services:
     container_name: rd-gdl-app
     restart: unless-stopped
     working_dir: /var/www
+    # Quitamos el puerto 3306 de aquí, la app ya tiene el 8005 (o el que uses)
     ports:
-      - "8005:8000" 
+      - "8005:8000"
     volumes:
       - ./:/var/www
     networks:
       - rd-network
 
-  # El motor de base de datos MySQL
   db:
     image: mysql:8.0
     container_name: rd-gdl-db
     restart: unless-stopped
+    # PONEMOS el puerto 3306 aquí para que DBeaver pueda entrar
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_DATABASE: rutadirecta_db
       MYSQL_ROOT_PASSWORD: secret_password
@@ -30,8 +30,7 @@ services:
       - dbdata:/var/lib/mysql
     networks:
       - rd-network
-  
-  # Interfaz visual para la base de datos
+
   phpmyadmin:
     image: phpmyadmin
     container_name: rd-gdl-pma
@@ -44,12 +43,10 @@ services:
     networks:
       - rd-network
 
-# Red interna para que los contenedores se hablen entre sí
 networks:
   rd-network:
     driver: bridge
 
-# Espacio persistente para que no se borren tus datos de la DB al apagar Docker
 volumes:
   dbdata:
     driver: local
